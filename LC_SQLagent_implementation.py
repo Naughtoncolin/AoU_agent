@@ -1,6 +1,10 @@
 import google.cloud.bigquery as bq
 from langchain_google_community import BigQueryLoader
 import os
+import config
+from langchain_community.utilities import SQLDatabase
+from langchain_community.agent_toolkits import create_sql_agent
+import pymysql
 
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
@@ -14,12 +18,13 @@ creds_file = '/home/cnaughton7/.config/gcloud/application_default_credentials.js
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/home/cnaughton7/.config/gcloud/application_default_credentials.json'
 
 # Connect to TCGA BigQuery database
-#TODO: Allow db to persist (currently very slow.
+#TODO: Allow BQ db to persist (currently very slow.
 # You may need to set packages to these versions to get to work
 #pip install SQLAlchemy==1.4.11
 #pip install sqlalchemy-bigquery==1.9.0)
-from langchain_community.utilities import SQLDatabase
-db_location = f'bigquery://isb-cgc-bq/TCGA'
+#db_location = f'bigquery://isb-cgc-bq/TCGA'
+pymysql.install_as_MySQLdb()
+db_location = config.mnt_location
 db = SQLDatabase.from_uri(db_location) # Required creating remote account and allowing access
 
 
